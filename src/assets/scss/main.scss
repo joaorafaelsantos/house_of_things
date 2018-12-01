@@ -1,0 +1,24 @@
+/**
+ * @author João R. Santos <up201809187@fe.up.pt>
+ */
+
+// Import Bulma's core
+@import "~bulma/sass/utilities/_all";
+
+// Colors
+@import "variables";
+
+
+
+// Import Bulma and Buefy styles
+@import "~bulma/bulma";
+@import "~@mdi/font/css/materialdesignicons.css";
+@import "~buefy/src/scss/buefy";
+
+// Main code
+
+.is-dark-grey {
+  background-color: $dark-grey;
+  color: white;
+}
+
