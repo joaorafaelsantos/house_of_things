@@ -1,6 +1,9 @@
 # HoT Dashboard
 
+<img src="https://i.imgur.com/cr2Lgxv.png" alt="UI">
+
 <p align="center">
+  <br/>
   <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" alt="Build Status">
   <img src="https://img.shields.io/badge/status-in%20development-orange.svg" alt="Development Status">
   <img src="https://img.shields.io/badge/npm-v6.2.0-blue.svg" alt="NPM Version">
@@ -37,7 +40,6 @@ npm run build
 
 ```
 "@vue/cli-plugin-babel": "^3.0.1",
-"@vue/cli-plugin-pwa": "^3.0.3",
 "@vue/cli-service": "^3.0.1",
 "jest": "^23.6.0",
 "node-sass": "^4.9.0",
