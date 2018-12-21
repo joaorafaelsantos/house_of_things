@@ -1,73 +1,48 @@
 <template>
     <section class="section">
         <div class="container house-areas">
-            <!-- Zone 1 -->
-            <h1 class="title has-text-left">Zone 1
-                <span class="icon" @click="toggleVisibility(0)">
-                    <i class="mdi mdi-24px"
-                       :class="isHide ? 'mdi-plus-circle-outline' : 'mdi-minus-circle-outline'"></i>
-                </span>
-            </h1>
-            <div class="columns" v-show="!isHide">
-                <div class="column area">
-                    <p class="subtitle has-text-white">Lights</p>
-                    <span class="icon lamp" @click="turnOff('Lights')">
-                    <i class="mdi mdi-48px" :class="isOn ? 'lamp-on mdi-lightbulb-on' : 'mdi-lightbulb'"></i>
-                    </span>
-                </div>
-                <div class="column area">
-                    <p class="subtitle has-text-white">AC</p>
-                    <p class="subtitle ac-value">
-                        <span class="icon ac-controller" @click="changeAC('decrease')">
-                    <i class="mdi mdi-36px mdi-code-less-than"></i>
-                    </span> {{acValue}}ºC <span class="icon ac-controller" @click="changeAC('increase')">
-                    <i class="mdi mdi-36px mdi-code-greater-than"></i>
-                    </span></p>
-                </div>
-                <div class="column area">
-                    <p class="subtitle has-text-white">Temperature</p>
-                    <p class="subtitle temperature-value">
-                        {{temperatureValue}}ºC <span class="icon">
-                    <i class="mdi mdi-36px mdi-thermometer"></i>
-                    </span>
-                    </p>
-                </div>
+            <!-- No devices message -->
+            <div v-if="devices && devices.length === 0">
+                <h1>No connected devices.</h1>
+                <img class="loading-animation" src="../assets/images/loading.svg" alt="Loading animation">
+
             </div>
 
-            <!-- Zone 2-->
-            <h1 class="title has-text-left">Zone 2
-                <span class="icon" @click="toggleVisibility(1)">
-                    <i class="mdi mdi-24px"
-                       :class="isHide ? 'mdi-plus-circle-outline' : 'mdi-minus-circle-outline'"></i>
-                </span>
-            </h1>
-            <div class="columns">
-                <div class="column area">
-                    <p class="subtitle has-text-white">Humidity</p>
-                    <p class="subtitle humidity-value">
-                        {{humidityValue}}% <span class="icon">
-                    <i class="mdi mdi-36px mdi-water-percent"></i>
-                    </span>
-                    </p>
-                </div>
-                <div class="column area">
-                    <p class="subtitle has-text-white">Blinds</p>
-                    <span class="icon lamp" @click="turnOff('Blinds')">
-                    <i class="mdi mdi-48px mdi-blinds" :class="isOn ? 'blinds-on' : ''"></i>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Zone 3-->
-            <h1 class="title has-text-left">Zone 3</h1>
-            <div class="columns">
-                <div class="column area">
-                    <p class="subtitle has-text-white">Humidity</p>
-                    <p class="subtitle humidity-value">
-                        {{humidityValue}}% <span class="icon">
-                    <i class="mdi mdi-36px mdi-water-percent"></i>
-                    </span>
-                    </p>
+            <!-- Devices -->
+            <div v-for="device in devices">
+                <!-- Zone -->
+                <h1 class="title has-text-left">{{ device.Zone }}</h1>
+                <div class="columns">
+                    <!-- Light Device -->
+                    <LightDevice v-if="device.Specs.Classifier === 'lamp'"
+                                 :device-id=device.Id
+                                 :device-value="device.State.Value"
+                                 :device-power="device.State.Power">
+                    </LightDevice>
+                    <!-- AC Device -->
+                    <ACDevice v-if="device.Specs.Classifier === 'ac'"
+                              :device-id=device.Id
+                              :device-value="device.State.Value"
+                              :device-power="device.State.Power">
+                    </ACDevice>
+                    <!-- Blind Device -->
+                    <BlindDevice v-if="device.Specs.Classifier === 'blind'"
+                                 :device-id=device.Id
+                                 :device-value="device.State.Value"
+                                 :device-power="device.State.Power">
+                    </BlindDevice>
+                    <!-- Humidity Device -->
+                    <HumidityDevice v-if="device.Specs.Classifier === 'humidity'"
+                                    :device-id="device.Id"
+                                    :device-value="device.State.Value"
+                                    :device-power="device.State.Power">
+                    </HumidityDevice>
+                    <!-- Temperature Device -->
+                    <TemperatureDevice v-if="device.Specs.Classifier === 'temperature'"
+                                       :device-id=device.Id
+                                       :device-value="device.State.Value"
+                                       :device-power="device.State.Power">
+                    </TemperatureDevice>
                 </div>
             </div>
         </div>
@@ -75,46 +50,63 @@
 </template>
 
 <script>
+    import ACDevice from '../components/Devices/ACDevice'
+    import BlindDevice from '../components/Devices/BlindDevice'
+    import LightDevice from '../components/Devices/LightDevice'
+    import HumidityDevice from '../components/Devices/HumidityDevice'
+    import TemperatureDevice from '../components/Devices/TemperatureDevice'
+
+    const signalR = require("@aspnet/signalr");
+
     export default {
         name: 'HouseAreas',
+        components: {
+            ACDevice,
+            BlindDevice,
+            LightDevice,
+            HumidityDevice,
+            TemperatureDevice
+        },
         data() {
             return {
-                isHide: false,
-                isOn: true,
-                acValue: 25,
-                temperatureValue: 21,
-                humidityValue: 91
+                devices: [],
+                device: {
+                    Id: null,
+                    Zone: null,
+                    Specs: {
+                        Type: null,
+                        Category: null,
+                        Classifier: null
+                    },
+                    State: {
+                        Power: null,
+                        Value: null
+                    }
+                }
             }
         },
-        methods: {
-            toggleVisibility(index) {
-                this.isHide = !this.isHide
-            },
-            turnOff(type) {
-                this.isOn = !this.isOn
-                let message
-                if (this.isOn) {
-                    message = `${type} are on!`
-                } else {
-                    message = `${type} are off!`
-                }
-                this.showToast(message)
-            },
-            changeAC(type) {
-                if (type === 'decrease') {
-                    this.acValue--
-                } else {
-                    this.acValue++
-                }
-                const message = `AC was changed to ${this.acValue}ºC `
-                this.showToast(message)
-            },
-            showToast(message) {
-                this.$toast.open({
-                    message: message,
-                    position: 'is-bottom'
-                })
-            }
+        created() {
+
+            // Create SignalR connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/commsat")
+                .build();
+
+            // Store SignalR connection
+            this.$store.commit('signalr/setConnection', connection)
+
+            // Start SignalR connection
+            connection.start().catch(err => console.error(err));
+
+            // SignalR on connect
+            connection.on("onConnect", (message) => {
+                this.devices.push(message)
+            });
+
+            // SignalR on state changed
+            connection.on("onStateChanged", (message) => {
+                this.devices.push(message)
+            });
         }
     }
 </script>
@@ -157,31 +149,9 @@
         cursor: pointer;
     }
 
-    .lamp-on {
-        color: $yellow;
+    .loading-animation {
+        padding-top: 16%;
     }
 
-    .ac-value {
-        color: $green;
-        font-size: 2rem !important;
-    }
-
-    .ac-controller {
-        margin: 0px 5px 0px 5px;
-    }
-
-    .temperature-value {
-        color: $pink;
-        font-size: 2rem !important;
-    }
-
-    .humidity-value {
-        color: $blue;
-        font-size: 2rem !important;
-    }
-
-    .blinds-on {
-        color: $light-pink;
-    }
 
 </style>

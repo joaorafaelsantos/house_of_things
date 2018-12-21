@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@aspnet/signalr": "^1.1.0",
     "@mdi/font": "^2.6.95",
     "axios": "^0.18.0",
     "buefy": "^0.6.6",

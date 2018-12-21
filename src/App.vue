@@ -26,9 +26,14 @@
 
     @import url('https://fonts.googleapis.com/css?family=Poppins');
 
+    html, body {
+        min-height: 100vh;
+        min-width: 100vw;
+        background-color: $dark-grey !important;
+    }
+
     body {
-        width: 100vw;
-        background-color: $dark-grey;
+
     }
 
     #app {

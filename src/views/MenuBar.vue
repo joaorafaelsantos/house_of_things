@@ -20,7 +20,7 @@
             }
         },
         created() {
-            setInterval(() => this.hours = this.parsedHours(), 1000 * 60)
+            setInterval(() => (this.hours = this.parsedHours()), 1000)
         },
         methods: {
             parsedHours() {
