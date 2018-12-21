@@ -1,6 +1,6 @@
 <template>
     <div class="column area mb-3">
-        <p class="subtitle has-text-white">AC</p>
+        <p class="subtitle has-text-white">AC :: <span class="has-text-medium-dark">{{deviceZone}}</span></p>
         <p class="subtitle ac-value">
             <span class="icon ac-controller" @click="changeAC('decrease', showToast)">
                 <i class="mdi mdi-36px mdi-code-less-than"></i>
@@ -29,6 +29,10 @@
             devicePower: {
                 type: String,
                 required: true
+            },
+            deviceZone: {
+                type: String,
+                required: true
             }
         },
         data() {
@@ -52,10 +56,10 @@
                 }
 
                 const newState = {
-                    Id: this.deviceId,
-                    State: {
-                        Value: this.value.toString(),
-                        Power: this.devicePower
+                    id: this.deviceId,
+                    state: {
+                        value: this.value.toString(),
+                        power: this.devicePower
                     }
                 }
                 console.log(newState)

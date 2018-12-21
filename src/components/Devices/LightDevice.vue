@@ -1,6 +1,6 @@
 <template>
     <div class="column area mb-3">
-        <p class="subtitle has-text-white">Light</p>
+        <p class="subtitle has-text-white">Light :: <span class="has-text-medium-dark">{{deviceZone}}</span></p>
         <span class="icon lamp" @click="toggleLight(showToast)">
                     <i class="mdi mdi-48px" :class="isOn ? 'lamp-on mdi-lightbulb-on' : 'mdi-lightbulb'"></i>
         </span>
@@ -25,6 +25,10 @@
             devicePower: {
                 type: String,
                 required: true
+            },
+            deviceZone: {
+                type: String,
+                required: true
             }
         },
         data() {
@@ -46,10 +50,10 @@
                 showToast(message)
 
                 const newState = {
-                    Id: this.deviceId,
-                    State: {
-                        Value: this.deviceValue,
-                        Power: this.isOn ? 'On' : 'Off'
+                    id: this.deviceId,
+                    state: {
+                        value: this.deviceValue,
+                        power: this.isOn ? 'On' : 'Off'
                     }
                 }
                 console.log(newState)

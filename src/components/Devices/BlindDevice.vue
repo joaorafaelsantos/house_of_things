@@ -1,6 +1,6 @@
 <template>
     <div class="column area mb-3">
-        <p class="subtitle has-text-white">Blinds</p>
+        <p class="subtitle has-text-white">Blinds :: <span class="has-text-medium-dark">{{deviceZone}}</span></p>
         <span class="icon blind" @click="toggleBlinds(showToast)">
                     <i class="mdi mdi-48px mdi-blinds" :class="isOpened ? 'blinds-on' : ''"></i>
         </span>
@@ -25,6 +25,10 @@
             devicePower: {
                 type: String,
                 required: true
+            },
+            deviceZone: {
+                type: String,
+                required: true
             }
         },
         data() {
@@ -46,10 +50,10 @@
                 showToast(message)
 
                 const newState = {
-                    Id: this.deviceId,
-                    State: {
-                        Value: this.deviceValue,
-                        Power: this.isOpened ? 'On' : 'Off'
+                    id: this.deviceId,
+                    state: {
+                        value: this.deviceValue,
+                        power: this.isOpened ? 'On' : 'Off'
                     }
                 }
 

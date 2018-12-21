@@ -1,6 +1,6 @@
 <template>
     <div class="column area mb-3">
-        <p class="subtitle has-text-white">Humidity</p>
+        <p class="subtitle has-text-white">Humidity :: <span class="has-text-medium-dark">{{deviceZone}}</span></p>
         <p class="subtitle humidity-value">
             {{value}}% <span class="icon">
                     <i class="mdi mdi-36px mdi-water-percent"></i>
@@ -25,6 +25,10 @@
                 required: true
             },
             devicePower: {
+                type: String,
+                required: true
+            },
+            deviceZone: {
                 type: String,
                 required: true
             }
