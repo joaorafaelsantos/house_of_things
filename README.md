@@ -1,4 +1,10 @@
+
 # HoT Dashboard
+
+<p>The class of Software Architecture and Design aims to introduce to students the concepts of software architectures, design patterns and topics directly related, such as the software components one. By the end of the course, the students had to develop a project designated as ‘House of Things’ that consisted in developing a software system to monitor, control, and manage home automation devices and activities. In this project, the main objective besides developing a functional system was to implement a group of architecture patterns to improve the system performance and organization.
+
+We’ve decided to implement our ‘House of Things’ project on .NET Core + Vue.js.
+This repository consists on the User Interface of the HoT project.</p>
 
 <img src="https://i.imgur.com/cr2Lgxv.png" alt="UI">
 
